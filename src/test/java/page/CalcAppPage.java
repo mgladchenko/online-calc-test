@@ -1,11 +1,13 @@
 package page;
 
 import net.serenitybdd.core.pages.PageObject;
+import net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static org.openqa.selenium.Keys.*;
 
+@DefaultUrl("https://www.online-calculator.com/full-screen-calculator/")
 public class CalcAppPage extends PageObject {
 
     @FindBy(xpath = "//iframe[@id='fullframe']")
@@ -15,13 +17,15 @@ public class CalcAppPage extends PageObject {
         getDriver().switchTo().frame(calcAppIFrame);
         String screenValue = (String) evaluateJavascript("return exportRoot.showscreen_txt.text;");
         getDriver().switchTo().defaultContent();
-        return screenValue;
+        return screenValue.replaceAll("\\s+","");
     }
 
     public void enterValue(String value) {
-        //ToDo: validate input is 9 digits with decimal and negative sign via regexp
+        if (!value.matches("^(-[0-9|\\.]{1,10}|[0-9|\\.]{1,10}|[0-9]{1,9})$")) {
+            throw new Error("Value should contain only 9 digits max, decimal and negative signs.");
+        }
         char[] valueChars = value.toCharArray();
-        boolean isValueNegative = valueChars[0] == '-';
+        boolean isValueNegative = value.charAt(0) == '-';
         for (char valueChar : valueChars) {
             switch (valueChar) {
                 case '0':
@@ -58,9 +62,9 @@ public class CalcAppPage extends PageObject {
                     calcAppIFrame.sendKeys(DECIMAL);
                     break;
             }
-            if (isValueNegative) {
-                calcAppIFrame.sendKeys(SUBTRACT);
-            }
+        }
+        if (isValueNegative) {
+            calcAppIFrame.sendKeys("#");
         }
     }
 

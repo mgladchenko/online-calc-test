@@ -2,7 +2,7 @@
 
 **Setup on OS X:**
 1. Install Homebrew package manager if not installed (https://brew.sh/)
-2. Install JDK 8 or above via Homebrew   
+2. Install JDK 8 or higher via Homebrew   
 `brew cask install java`  
 3. Verify that JDK was installed  
 `java -version`
@@ -16,7 +16,7 @@
 
 **To Run tests from command line:**  
 `mvn clean verify`  
-Note: This will run RunJBehaveScenarios which specifies BDD Story file for execution.
+Note: This will run RunJBehaveTest which specifies BDD Story file for execution.
 
 **View Serenity HTML report:**    
 Will be available automatically after run from command line at /target/site/serenity/index.html 

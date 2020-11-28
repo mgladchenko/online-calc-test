@@ -1,21 +1,21 @@
 package step;
 
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.steps.ScenarioSteps;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import page.CalcAppPage;
 
-import static net.serenitybdd.core.Serenity.getDriver;
 import static org.junit.Assert.*;
 
-public class CalcSteps {
+public class CalcSteps extends ScenarioSteps {
     CalcAppPage calcAppPage;
 
     @Step
     @Given("I open online Calc app")
     public CalcSteps openCalcApp() {
-        getDriver().get("https://www.online-calculator.com/full-screen-calculator/");
+        calcAppPage.open();
         return this;
     }
 
