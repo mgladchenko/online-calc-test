@@ -18,10 +18,12 @@ public class CalcAppPage extends PageObject {
         return screenValue;
     }
 
-    public void enterNumber(char[] numberChars) {
-        //ToDo: validate input is 9 digits with decimal via regexp
-        for (char numberChar : numberChars) {
-            switch (numberChar) {
+    public void enterValue(String value) {
+        //ToDo: validate input is 9 digits with decimal and negative sign via regexp
+        char[] valueChars = value.toCharArray();
+        boolean isValueNegative = valueChars[0] == '-';
+        for (char valueChar : valueChars) {
+            switch (valueChar) {
                 case '0':
                     calcAppIFrame.sendKeys(NUMPAD0);
                     break;
@@ -55,35 +57,37 @@ public class CalcAppPage extends PageObject {
                 case '.':
                     calcAppIFrame.sendKeys(DECIMAL);
                     break;
-                default:
-                    throw new Error(String.format("Unsupported character: %s", numberChar));
+            }
+            if (isValueNegative) {
+                calcAppIFrame.sendKeys(SUBTRACT);
             }
         }
     }
 
-    public void selectOperation(char operation) {
-        //ToDo: validate input is operation via regexp
+    public void selectOperation(String operation) {
+        if (!operation.matches("^(\\+{1}|-{1}|\\/{1}|\\*{1}|C{1})$")) {
+            throw new Error("Operation should be one of: +, -, /, *, =, C ");
+        }
+
         switch (operation) {
-            case '/':
+            case "/":
                 calcAppIFrame.sendKeys(DIVIDE);
                 break;
-            case '*':
+            case "*":
                 calcAppIFrame.sendKeys(MULTIPLY);
                 break;
-            case '-':
+            case "-":
                 calcAppIFrame.sendKeys(SUBTRACT);
                 break;
-            case '+':
+            case "+":
                 calcAppIFrame.sendKeys(ADD);
                 break;
-            case '=':
+            case "=":
                 calcAppIFrame.sendKeys(EQUALS);
                 break;
-            case 'C':
+            case "C":
                 calcAppIFrame.sendKeys("C");
                 break;
-            default:
-                throw new Error(String.format("Unsupported operation: %s", operation));
         }
     }
 
